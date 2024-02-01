@@ -136,7 +136,7 @@ runcmd(struct cmd *cmd)
 int
 getcmd(char *buf, int nbuf)
 {
-  write(2, "$ ", 2);
+  write(2, "S2024$ ", 7);
   memset(buf, 0, nbuf);
   gets(buf, nbuf);
   if(buf[0] == 0) // EOF
@@ -343,9 +343,16 @@ parsecmd(char *s)
   nulterminate(cmd);
   return cmd;
 }
+//TODO: Adding parethensis operator
+struct cmd *parsegroups(char **ps,char *es){
+  struct cmd *cmd;
 
-struct cmd*
-parseline(char **ps, char *es)
+  
+  
+  return cmd;
+}
+
+struct cmd* parseline(char **ps, char *es)
 {
   struct cmd *cmd;
 
