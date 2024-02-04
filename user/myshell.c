@@ -265,6 +265,8 @@ backcmd(struct cmd *subcmd)
 char whitespace[] = " \t\r\n\v";
 char symbols[] = "<|>&;()";
 
+
+// Tokenizer function
 int
 gettoken(char **ps, char *es, char **q, char **eq)
 {
@@ -310,9 +312,7 @@ gettoken(char **ps, char *es, char **q, char **eq)
   return ret;
 }
 
-int
-peek(char **ps, char *es, char *toks)
-{
+int peek(char **ps, char *es, char *toks){
   char *s;
 
   s = *ps;
@@ -344,19 +344,28 @@ parsecmd(char *s)
   return cmd;
 }
 //TODO: Adding parethensis operator
-struct cmd *parsegroups(char **ps,char *es){
+struct cmd *parseparen(char **ps, char *es)
+{
   struct cmd *cmd;
 
-  
-  
+  cmd = parsepipe(ps, es);
+  while (peek(ps, es, "&"))
+  {
+    gettoken(ps, es, 0, 0);
+    cmd = backcmd(cmd);
+  }
+  if (peek(ps, es, "("))
+  {
+    gettoken(ps, es, 0, 0);
+    cmd = listcmd(cmd, parseline(ps, es));
+  }
   return cmd;
 }
 
 struct cmd* parseline(char **ps, char *es)
 {
   struct cmd *cmd;
-
-  cmd = parsepipe(ps, es);
+  cmd = parseparen(ps, es);
   while(peek(ps, es, "&")){
     gettoken(ps, es, 0, 0);
     cmd = backcmd(cmd);
